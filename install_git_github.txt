@@ -1,0 +1,14 @@
+install git
+
+télécharger git
+cliquer sur l'installer
+changer Vim par notepad++
+suivant
+
+install github :
+
+télécharger github
+renseigner le compte/mot de passe de github
+installer
+
+Créer un repository dans le répertoire du projet symfony
