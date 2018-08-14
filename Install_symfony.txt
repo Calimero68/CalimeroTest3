@@ -1,0 +1,7 @@
+installation symfony : 
+	Télécharger composer et l'installer
+	Aller dans le dossier C:\wamp64\www à partir de la console
+	Taper composer create-project symfony/framework-standard-edition CalimeroTest "3.4.*"
+	
+	Le projet se créé
+	Quelques infos sont demandés, laisser la valeur par défaut pour toute, sauf secret "test"
