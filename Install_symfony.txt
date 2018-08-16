@@ -5,3 +5,10 @@ installation symfony :
 	
 	Le projet se créé
 	Quelques infos sont demandés, laisser la valeur par défaut pour toute, sauf secret "test"
+	
+	
+	
+Sur le pc suivant :
+	Récupérer le dossier de github
+	Aller dans le dossier git
+	Faire par DOS : composer install

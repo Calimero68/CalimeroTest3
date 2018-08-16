@@ -1,0 +1,51 @@
+https://symfony.com/doc/3.4/page_creation.html
+
+Pour créer une page, il faut une route et un controleur
+
+La route : elle est annotée dans le controleur avec la ligne 
+	/**
+     * @Route("/lucky/number")
+     */
+	 
+Le controleur ==> Il finit toujours par Controller :
+class LuckyController {}
+
+La classe ==> Elle finit toujours par Action : 
+public function numberAction()
+    {
+        $number = random_int(0, 100);
+
+        return new Response(
+            '<html><body>Lucky number: '.$number.'</body></html>'
+        );
+    }
+	
+Le code complet :
+
+<?php
+// src/AppBundle/Controller/LuckyController.php
+namespace AppBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class LuckyController
+{
+    /**
+     * @Route("/lucky/number")
+     */
+    public function numberAction()
+    {
+        $number = random_int(0, 100);
+
+        return new Response(
+            '<html><body>Lucky number: '.$number.'</body></html>'
+        );
+    }
+}
+?>
+
+Pour tester :
+php bin/console server:run
+
+Puis http://localhost:8000/lucky/number
