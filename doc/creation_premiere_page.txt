@@ -46,6 +46,26 @@ class LuckyController
 ?>
 
 Pour tester :
+Se mettre dans C:\wamp64\www\CalimeroTest
 php bin/console server:run
 
 Puis http://localhost:8000/lucky/number
+
+
+Pour aller plus loin, on va séparer le code du rendu (renderer)
+
+On rajoute donc la ligne suivante pour utiliser un bundle
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+on étend notre controller avec
+class LuckyController extends Controller
+
+On modifie le return avec
+return $this->render('lucky/number.html.twig', array(
+            'number' => $number,
+			));
+			
+Et pour finir, on créé un nouveau fichier dans app/Resources/views/lucky que l'on va appeler number.html.twig
+Et qui contiendra
+{# app/Resources/views/lucky/number.html.twig #}
+<h1>Your lucky number is {{ number }}</h1>
