@@ -9,7 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class LuckyController extends Controller
 {
     /**
-     * @Route("/lucky/number")
+	 * Matches /lucky/test/ exactly
+     * @Route("/lucky/test/", name="numberNoParam")
      */
     public function numberAction()
     {
@@ -21,9 +22,10 @@ class LuckyController extends Controller
     }
 
 	/**
-     * @Route("/lucky/number/{test}")
+	 * Matches /lucky/number/*
+	 * @Route("/lucky/number/{test}", name="numberParam", requirements={"test"="\d+"})
      */
-    public function numberAction2($test)
+    public function numberAction2($test = 10)
     {
         $number = random_int(0, $test);
 

@@ -1,0 +1,82 @@
+Utilisation des annotations pour créer les routes, bien plus simple.
+Voir fichier C:\wamp64\www\CalimeroTest\src\AppBundle\Controller\LuckyController.php qui sert d'exemple
+Tuto : https://symfony.com/doc/3.4/routing.html
+
+Les routes sont créées dans le controller
+Symfony est capable de lire les routes du controller grâce au fichier C:\wamp64\www\CalimeroTest\app\config\routing.yml qui lui dit ou les lire
+
+// src/AppBundle/Controller/LuckyController.php
+namespace AppBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class LuckyController extends Controller {
+// creation route ici
+}
+
+Il existe plusieurs arguments que l'on peut passer à une route
+Ici par exemple, on dit que si le lien est /lucky/number/*, ça renverra obligatoirement à la fonction numberAction2 avec le * en paramètre. Le "Matches" permet de le dire.
+Si on veut que ce soit un lien précis, on rajoute "exactly" derrière
+Le name servira plus tard à créer des URL
+La partie requirements sert à dire que la variable test doit obligatoirement être un digit, peu importe la taille
+
+	/**
+	 * Matches /lucky/number/*
+     * @Route("/lucky/number/{test}", name="numberParam", requirements={"test"="\d+"})
+     */
+    public function numberAction2($test)
+    {
+		// code de la fonction ici
+	}
+	
+On peut donner une valeur par défaut à la variable pour que si l'utilisateur tape lucky/number sans paramètre, il accède quand même à la page
+Ici on fixe la valeur par défaut à 10
+public function numberAction2($test = 10)
+http://localhost:8000/lucky/number sera donc égal à http://localhost:8000/lucky/number/10
+
+
+Une route un peu plus avancée :
+class ArticleController extends Controller
+{
+    /**
+     * @Route(
+     *     "/articles/{_locale}/{year}/{slug}.{_format}",
+     *     defaults={"_format": "html"},
+     *     requirements={
+     *         "_locale": "en|fr",
+     *         "_format": "html|rss",
+     *         "year": "\d+"
+     *     }
+     * )
+     */
+    public function showAction($_locale, $year, $slug)
+    {
+    }
+}
+
+Ici les liens possibles sont par exemple
+/articles/en/2010/my-post
+/articles/fr/2010/my-post.rss
+/articles/en/2013/my-latest-post.html
+
+Le format par défaut est html. Il est donné par le paramètre _format qui fait parti des paramètres spéciaux de Symfony.
+Le format qui est passé en paramètre change le Content-type de la page générée pour qu'il colle au résultat (json, php, etc)
+
+Les paramètres spéciaux sont _controller, _format, _fragment, _locale
+Une explication plus détaillée se trouve sur le lien en haut de page
+
+
+
+Par défaut, si on oublie le / dans la route
+	/**
+	 * Matches /lucky/test exactly
+     * @Route("/lucky/test", name="numberNoParam")
+     */
+	 
+http://localhost:8000/lucky/test fonctionnera
+Mais http://localhost:8000/lucky/test/ ne fonctionnera pas (erreur 404)
+Si on le met, les 2 liens fonctionneront
+
+Pour que ça fonctionne dans les 2 cas même s'il manque le / dans la route, voir la doc : https://symfony.com/doc/3.4/routing/redirect_trailing_slash.html
