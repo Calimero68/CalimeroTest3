@@ -1,0 +1,27 @@
+{# app/Resources/views/home/base.html.twig #}
+{# on créé un template qui va simplement définir un block title et une sidebar
+Celui-ci sera ensuite hérité et le block title sera override par la page principale (home/homepage.html.twig) #}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Test Application{% endblock %}</title>
+    </head>
+
+	<body>
+	
+		<div id="header">
+			<img src="{{ asset('images/bandeau.png') }}" alt="Bandeau!" />
+		</div>
+	
+		<div id="sidebar">
+			{% block sidebar %}
+                <ul>
+                    <li><a href="{{ path('homepage') }}">Home</a></li>
+                    <li><a href="{{ path('numberNoParam') }}">Lucky number sur 100</a></li>
+                    <li><a href="{{ path('numberParam', {'number':10}) }}">Lucky number sur 10 (param)</a></li>
+                </ul>
+			{% endblock %}
+        </div>
+	</body>
+</html>

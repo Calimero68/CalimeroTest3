@@ -1,0 +1,74 @@
+Gestion des formulaires
+
+Tuto : https://symfony.com/doc/3.4/forms.html
+Exemple : C:\wamp64\www\CalimeroTest\src\AppBundle\Entity\Task.php et C:\wamp64\www\CalimeroTest\src\AppBundle\Controller\DefaultController.php
+http://localhost:8000/test
+
+Ce tutoriel permet de créer des formulaires basiques, gérés par le controller et simplement afficher par Twig.
+Ce n'est bien entendu pas la méthode la plus flexible, mais c'est une base.
+
+
+Un formulaire est basé sur un object ou sur une Doctine (BDD)
+Ici on a créé un object (class) Task avec 2 méthodes : task et dueDate avec leur getter et leur setter dans le fichier Task.php
+
+Dans le controlleur on initialise d'abord l'object Task
+		$task = new Task();
+        $task->setTask('Write a blog post');
+        $task->setDueDate(new \DateTime('tomorrow'));
+		
+Puis on créé le formulaire
+		$form = $this->createFormBuilder($task)
+            ->add('task', TextType::class)
+            ->add('dueDate', DateType::class)
+            ->add('save', SubmitType::class, array('label' => 'Create Task'))
+            ->getForm();
+			
+On vérifie s'il y a quelque chose dans la request. Si oui, il y a eu submit, on vérifie donc sa validité
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) 
+		{
+			$task = $form->getData();
+			return $this->redirectToRoute('task_success');
+		}
+Ici, si c'est bon, on effectue une redirection
+			
+On appelle ensuite la page twig en lui passant le formulaire, s'il n'y a pas eu de submit
+		return $this->render('default/new.html.twig', array(
+            'form' => $form->createView(),
+        ));
+		
+La page Twig contient le code suivant : on met le début du formulaire, on l'affiche, on met la fin
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }} {# l'attribut novalidate permet d'empêcher le browser de bloquer pour un champ null par exemple, c'est donc les contrôles côté serveur qui s'effectueront #}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+
+La validation des formulaires sous Symfony se fait à partir des constraints sur l'object.
+On doit donc les créer dans la class
+Pour cela, on utilise des "assert"
+	/**
+     * @Assert\NotBlank()
+	 * @Assert\Type("\DateTime")
+     */
+	 
+Il existe différent type de champ dans un formulaire.
+la liste complète se situe ici : https://symfony.com/doc/3.4/reference/forms/types.html
+
+
+
+
+Il existe plusieurs options que l'on peut utiliser sur un champ du formulaire.
+Par exemple le champ date est affiché par défaut avec 3 select boxes. On peut le faire en un seul champ avec l'option widget : ->add('dueDate', DateType::class, array('widget' => 'single_text'))
+
+Il est aussi possible de spécifiquer une option required à true, qui sur les navigateurs HTML5 va effectuer une validation côté client sur le champ.
+Il est toutefois recommandé de faire une validation côté serveur quoi qu'il arrive, car certains navigateurs peuvent ne pas être compatible
+
+Il est possible de mettre un label avec l'option label et de spécifier une taille max avec l'option maxlength
+
+On peut ne pas donner de type au champ, dans ce cas-là Symfony va trouver le type automatiquement, soit à partir de la classe, soit à part des metadata Doctrine (BDD)
+Dans ce cas-là, il peut aussi, en regardant la base ou les assert de la classe, spécifier automatiquement la maxlength et le required
+
+
+Plutôt que de déclarer le formulaire dans le controller, on peut le déclarer dans un fichier php à part et l'appeler du controller.
+Ca permet une plus grande flexibilité et une réutilisabilité du code.
+voir C:\wamp64\www\CalimeroTest\src\AppBundle\Form\TaskType.php et le defaultController

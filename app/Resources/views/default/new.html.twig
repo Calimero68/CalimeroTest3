@@ -1,0 +1,4 @@
+{# app/Resources/views/default/new.html.twig #}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }} {# l'attribut novalidate permet d'empêcher le browser de bloquer pour un champ null par exemple, c'est donc les contrôles côté serveur qui s'effectueront #}
+{{ form_widget(form) }}
+{{ form_end(form) }}

@@ -1,0 +1,135 @@
+Twig est l'outil de création de template utilisé par Symfony
+Un template est un simple fichier texte qui peut gérer plusieurs formats (html, xml, csv, etc)
+Le plus souvent, on utilise des templates PHP, qui contiennent un mix de PHP et de texte.
+
+Avec Symfony, le PHP est remplacé par twig, plus performant et plus facile à prendre en main
+
+Tuto : https://symfony.com/doc/3.4/templating.html
+Exemple : C:\wamp64\www\CalimeroTest\app\Resources\views\home
+
+
+
+Il existe 3 syntaxes spéciales sur Twig :
+{{ ... }} pour afficher une variable ou le résultat d'une expression. La variable n'utilise pas le $ devant
+{% ... % } fait quelque chose (loop, if, etc)
+{# ... #} : commentaire
+
+
+
+Twig contient aussi des filtres qui modifient le comportement avant rendu
+{{ title|upper }} va forcer le contenu à s'afficher en majuscule
+
+
+
+Il existe une longue liste de tags, de filtres et de fonctions disponibles par défaut.
+On peut aussi créer nos propres avec : https://symfony.com/doc/3.4/templating/twig_extension.html
+
+
+
+Exemple de code :
+{% for i in 1..10 %}
+    <div class="{{ cycle(['even', 'odd'], i) }}">
+      <!-- some HTML here -->
+    </div>
+{% endfor %}
+
+On créé 10 div tag, en alternant 1 avec la class even, un avec la class odd
+
+
+
+Twig est plus performant que PHP : ici on combine un for et un if sur la même ligne
+<ul>
+    {% for user in users if user.active %}
+        <li>{{ user.username }}</li>
+    {% else %}
+        <li>No users found</li>
+    {% endfor %}
+</ul>
+
+
+
+Twig gère l'héritage de template de la même manière que le fait PHP.
+Prenons ce code en exemple
+{# app/Resources/views/base.html.twig #}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Test Application{% endblock %}</title>
+    </head>
+    <body>
+        <div id="sidebar">
+            {% block sidebar %}
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            {% endblock %}
+        </div>
+
+        <div id="content">
+            {% block body %}{% endblock %}
+        </div>
+    </body>
+</html>
+
+On déclare 3 blocks : sidebar, title et body
+On peut ensuite demander à un template d'hériter de celui-ci et de modifier que 2 des 3 blocks par exemple.
+Ici on remplace le contenu parent, mais on pourrait le modifier en lui demandant d'inclure le contenu parent avec la fonction {{ parent() }}
+{# app/Resources/views/blog/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}My cool blog posts{% endblock %}
+
+{% block body %}
+    {% for entry in blog_entries %}
+        <h2>{{ entry.title }}</h2>
+        <p>{{ entry.body }}</p>
+    {% endfor %}
+{% endblock %}
+
+
+
+On peut hériter d'un template qui aurait été créé dans un autre bundle.
+Pour ceci la syntaxe est @AcmeBlog/Blog/index.html.twig
+@AcmeBlog est le nom du bundle sans le suffixe Bundle
+Blog veut dire qu'on a créé un sous dossier Blog dans le dossier Resources/views/ du Bundle AcmeBlog
+On a ensuite le nom du fichier
+
+
+
+Il existe 2 suffixes au template qui change le format, et l'engine utilisé
+index.html.twig va générer une page html en utilisant le moteur Twig.
+On pourrait remplacer twig par php
+Html pourrait être remplacé par css, xml, etc
+Une explication détaillée de comment faire est présente ici : https://symfony.com/doc/3.4/templating/formats.html
+
+
+
+Dès qu'un bout de template risque d'être réutilisé plusieurs fois, on le met dans son propre template
+{# app/Resources/views/article/article_details.html.twig #}
+<h2>{{ article.title }}</h2>
+<h3 class="byline">by {{ article.authorName }}</h3>
+
+<p>
+    {{ article.body }}
+</p>
+
+Et on l'include ensuite dans les templates où il sera appelé
+{# app/Resources/views/article/list.html.twig #}
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <h1>Recent Articles<h1>
+
+    {% for article in articles %}
+        {{ include('article/article_details.html.twig', { 'article': article }) }}
+    {% endfor %}
+{% endblock %}
+
+
+
+Si on veut intégrer une image, du css, du js, on passe par des assets
+<img src="{{ asset('images/bandeau.png') }}" alt="Bandeau!" />
+<link href="{{ asset('css/blog.css') }}" rel="stylesheet" />
+<script src="{{ asset('js/main.js') }}"></script>
