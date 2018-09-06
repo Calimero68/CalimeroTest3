@@ -1,0 +1,31 @@
+https://symfony.com/doc/3.4/security/entity_provider.html
+https://symfony.com/doc/3.4/doctrine/registration_form.html
+
+C:\wamp64\www\CalimeroTest\src\Calimero\userBundle\Entity\Users.php
+
+creation de la table Users
+creation de l'entity Users
+L'entity Users implémente la class userInterface il faut donc obligatoirement créer le constructeur,
+la fonction getSalt qui est utilisé selon l'encodeur (pas besoin avec celui de base de symfony),
+le getRoles, eraseCredentials, getPassword et getUsername 
+
+Les fonctions serialize et unserialize sont rajoutés pour permette de contrôler que l'utilisateur n'a pas changé
+et qu'il n'y a pas de problème de sécurité. Si c'est le cas, l'utilisateur est logout automatiquement
+
+Il faut ensuite modifier la sécurité de Symfony pour lui dire d'utiliser l'entity
+Dans le fichier C:\wamp64\www\CalimeroTest\app\config\security.yml
+Il faut rajouter la section
+encoders:
+        userBundle\Entity\Users:
+            algorithm: bcrypt
+			
+Dans providers il faut rajouter 
+		our_db_provider:
+            entity:
+                class: userBundle:User
+                property: username			
+
+Dans firewalls, main il faut décommenter
+http_basic: ~
+et rajouter 
+provider: our_db_provider

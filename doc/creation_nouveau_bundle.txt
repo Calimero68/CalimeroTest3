@@ -1,0 +1,25 @@
+Sur la console :
+php app/console generate:bundle
+
+On saisit le namespace du bundle : Calimero/userBundle
+Le nom du bundle est laissé par défaut : CalimerouserBundle
+la destiantion est laissé par défaut
+Le format des fichiers de config est passé en yml
+
+Symfony ne gère pas tout tout seul.
+Il faut modifier le fichier C:\wamp64\www\CalimeroTest\composer.json
+et remplacer "AppBundle\\": "src/AppBundle" par "\\": "src/"
+
+Le nouveau fichier C:\wamp64\www\CalimeroTest\src\Calimero\userBundle\Controller\DefaultController.php doit être modifié
+Il faut rajouter les lignes suivantes
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+
+et modifier 
+return $this->render('CalimerouserBundle:Default:index.html.twig');
+par
+return $this->render('@Calimerouser/Default/index.html.twig');
+
+Il faut aussi modifier le fichier C:\wamp64\www\CalimeroTest\app\config\routing.yml
+et rajouter type: annotation dans le nouveau bundle (attention, 4 espaces avant le "type")

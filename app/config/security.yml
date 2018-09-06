@@ -2,8 +2,16 @@
 # https://symfony.com/doc/current/security.html
 security:
 
+    encoders:
+        userBundle\Entity\Users:
+            algorithm: bcrypt
+
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
+        our_db_provider:
+            entity:
+                class: userBundle:User
+                property: username
         in_memory:
             memory: ~
 
@@ -18,7 +26,8 @@ security:
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
+            http_basic: ~
+            provider: our_db_provider
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~

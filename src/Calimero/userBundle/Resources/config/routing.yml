@@ -1,0 +1,3 @@
+calimerouser_homepage:
+    path:     /
+    defaults: { _controller: CalimerouserBundle:Default:index }

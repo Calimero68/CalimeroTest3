@@ -20,6 +20,10 @@ Celui-ci sera ensuite hérité et le block title sera override par la page princ
                     <li><a href="{{ path('homepage') }}">Home</a></li>
                     <li><a href="{{ path('numberNoParam') }}">Lucky number sur 100</a></li>
                     <li><a href="{{ path('numberParam', {'number':10}) }}">Lucky number sur 10 (param)</a></li>
+					<li><a href="{{ path('testForm') }}">Test de formulaire avec redirection si valide</a></li>
+					<li><a href="{{ path('creationCompte') }}">Création compte auto</a></li>
+					<li><a href="{{ path('afficheCompte', {'userId':2}) }}">Username d'un compte</a></li>
+					
                 </ul>
 			{% endblock %}
         </div>
